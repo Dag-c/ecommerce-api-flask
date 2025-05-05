@@ -23,7 +23,7 @@ docker-compose up -d nginx certbot
 # Paso 5: Esperar a que nginx esté listo
 echo "⏳ Esperando a que Nginx esté listo..."
 until docker-compose logs nginx 2>&1 | grep -m 1 "start worker processes"; do
-  sleep 2
+  sleep 1
 done
 
 # Paso 6: Solicitar certificado SSL con certbot
