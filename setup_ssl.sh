@@ -1,29 +1,39 @@
 #!/bin/bash
 
-echo "🔁 Paso 1: Usando configuración HTTP para obtener certificado..."
+set -a
+source .env
+set +a
 
-# Cambiar el archivo .env para usar nginx.http.conf
+echo "🔁 Paso 1: Configuración HTTP temporal para obtener certificados..."
+export NGINX_CONF=nginx.http.conf
 sed -i 's/^NGINX_CONF=.*/NGINX_CONF=nginx.http.conf/' .env
 
-# Reiniciar Nginx con configuración HTTP
-docker-compose down -v
+echo "🧹 Apagando servicios antiguos si existen..."
+docker-compose down
+
+echo "🐘 Levantando base de datos (postgres) y Redis..."
+docker-compose up -d postgres redis
+
+echo "🚀 Levantando API..."
+docker-compose up -d api
+
+echo "🌐 Levantando Nginx con configuración HTTP..."
 docker-compose up -d nginx
 
-echo "🌐 Esperando a que Nginx (HTTP) esté listo..."
-sleep 5  # Puedes ajustar si nginx tarda más en levantar
+echo "⌛ Esperando 5 segundos para que Nginx esté listo..."
+sleep 5
 
-echo "🔐 Ejecutando Certbot para obtener certificados..."
-docker-compose run --rm certbot
+echo "🔐 Ejecutando Certbot (renovación no interactiva)..."
+docker-compose run --rm certbot renew -v
 
 echo "🛑 Apagando Nginx (modo HTTP)..."
 docker-compose stop nginx
 
 echo "🔁 Paso 2: Cambiando a configuración HTTPS..."
-
-# Cambiar el archivo .env para usar nginx.https.conf
+export NGINX_CONF=nginx.https.conf
 sed -i 's/^NGINX_CONF=.*/NGINX_CONF=nginx.https.conf/' .env
 
 echo "🚀 Levantando Nginx con configuración HTTPS..."
-docker-compose up
+docker-compose up -d nginx
 
-echo "✅ Nginx ya sirve con HTTPS."
+echo "✅ Todo listo. Nginx está sirviendo por HTTPS."
