@@ -22,8 +22,9 @@ docker-compose up -d nginx certbot
 
 # Paso 5: Esperar a que nginx esté listo
 echo "⏳ Esperando a que Nginx esté listo..."
-counter=0
+counter=1
 until docker-compose logs nginx 2>&1 | grep -m 1 "start worker processes" || [ $counter -ge 10 ]; do
+  echo "⏳ Esperando a que Nginx esté listo... ($counter)"
   sleep 1
   counter=$((counter+1))
 done
@@ -37,7 +38,11 @@ fi
 echo "🔐 Solicitando certificado SSL..."
 docker-compose run --rm certbot
 
-# Paso 7: Detener nginx
+# Pausa corta para asegurarse de que los archivos estén disponibles
+echo "⌛ Esperando 5 segundos para asegurar que los archivos SSL estén disponibles..."
+sleep 5
+
+# Paso 7: Detener nginx temporal (modo HTTP)
 echo "🛑 Deteniendo nginx temporal..."
 docker-compose stop nginx
 
@@ -51,8 +56,10 @@ docker-compose up -d nginx
 # Paso 10: Crear cron job para renovar el certificado
 CRON_CMD="docker-compose run --rm certbot renew && docker-compose exec nginx nginx -s reload"
 CRON_JOB="0 3 * * 1 $CRON_CMD"
-
-# Evitar duplicados en crontab
 (crontab -l 2>/dev/null | grep -Fv "$CRON_CMD" ; echo "$CRON_JOB") | crontab -
 
-echo "✅ Certificado creado y renovación automática configurada."
+# Paso 11: Levantar API, base de datos y Redis
+echo "🚀 Levantando todos los servicios restantes..."
+docker-compose up -d api redis db
+
+echo "✅ Certificado creado, configuración HTTPS activa y servicios levantados."
