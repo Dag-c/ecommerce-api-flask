@@ -23,7 +23,7 @@ def create_app(config: Config = None):
     else:
         app.config.from_object(Config)
 
-    CORS(app, origins=["https://dag-c.github.io"], methods=["GET", "POST", "PATCH", "DELETE"],
+    CORS(app, methods=["GET", "POST", "PATCH", "DELETE"],
          allow_headers=["Content-Type"])
 
     db.init_app(app)
