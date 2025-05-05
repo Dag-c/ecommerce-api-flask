@@ -2,6 +2,7 @@ from flask import Flask
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import redis
+from flask_cors import CORS
 from sqlalchemy.exc import SQLAlchemyError
 from flasgger import Swagger
 
@@ -21,6 +22,9 @@ def create_app(config: Config = None):
         app.config.from_object(config)
     else:
         app.config.from_object(Config)
+
+    CORS(app, origins=["https://dag-c.github.io"], methods=["GET", "POST", "PATCH", "DELETE"],
+         allow_headers=["Content-Type"])
 
     db.init_app(app)
 
