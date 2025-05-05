@@ -11,6 +11,7 @@ from .routes.users import users_bp
 from .routes.products import products_bp
 from .routes.orders import orders_bp
 from .routes.auth import auth_bp
+from .routes.email import email_bp
 from .utils.error_handler import ErrorHandler
 
 
@@ -37,6 +38,7 @@ def create_app(config: Config = None):
     app.register_blueprint(products_bp)
     app.register_blueprint(orders_bp)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(email_bp)
 
     # Swagger
     swagger_template = {
@@ -49,7 +51,7 @@ def create_app(config: Config = None):
             "contact": {
                 "name": "Diego Armando Guillen de la Cruz",
                 "email": "diego.guillen.d.cruz@gmail.com",
-                "url": "https://yourportfolio.com"
+                "url": "https://dag-c.github.io/diegodev-portfolio/"
             },
             "license": {
                 "name": "MIT",
