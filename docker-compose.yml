@@ -64,7 +64,7 @@ services:
     volumes:
       - ./certbot/www:/var/www/certbot
       - ./certbot/conf:/etc/letsencrypt
-    command: certonly --webroot --webroot-path=/var/www/certbot --email ${CERTBOT_EMAIL} --agree-tos --no-eff-email -d ${CERTBOT_DOMAIN}
+    command: certonly --webroot --webroot-path=/var/www/certbot --email ${CERTBOT_DOMAIN} --agree-tos --no-eff-email -d ${CERTBOT_DOMAIN}
     networks:
       - ecommerce-network
 
