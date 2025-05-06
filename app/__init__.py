@@ -51,11 +51,11 @@ def create_app(config: Config = None):
             "title": "Ecommerce API",
             "description": "This is the API documentation for my ecommerce project using Flask.",
             "version": "1.0.0",
-            "termsOfService": "https://mywebsite.com/terms",
+            "termsOfService": "https://dag-c.github.io/diegodev-portfolio/#home",
             "contact": {
                 "name": "Diego Armando Guillen de la Cruz",
                 "email": "diego.guillen.d.cruz@gmail.com",
-                "url": "https://dag-c.github.io/diegodev-portfolio/"
+                "url": "https://dag-c.github.io/diegodev-portfolio/#home"
             },
             "license": {
                 "name": "MIT",
