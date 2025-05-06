@@ -8,6 +8,9 @@ echo "Stop old containers and their volumes..."
 docker-compose down -v
 sleep 5
 echo "Starting Postgres and Redis containers..."
+echo $POSTGRES_USER_PRODUCTION
+echo $POSTGRES_PASSWORD_PRODUCTION
+echo $POSTGRES_DB_PRODUCTION
 docker-compose up -d postgres redis
 
 echo "Starting API..."
