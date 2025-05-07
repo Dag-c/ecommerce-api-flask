@@ -8,9 +8,6 @@ echo "Stop old containers and their volumes..."
 docker-compose down -v
 sleep 5
 echo "Starting Postgres and Redis containers..."
-echo $POSTGRES_USER_PRODUCTION
-echo $POSTGRES_PASSWORD_PRODUCTION
-echo $POSTGRES_DB_PRODUCTION
 docker-compose up -d postgres redis
 
 echo "Starting API..."
@@ -23,16 +20,16 @@ docker-compose up -d nginx
 echo "Waiting for Nginx..."
 sleep 5
 
-echo "Run Certbot (renovación no interactiva)..."
+echo "Run Certbot (Non-interactive renew)..."
 docker-compose run --rm certbot renew -v
 
-echo "🛑 Apagando Nginx (modo HTTP)..."
+echo "Turn off Nginx (mode HTTP)..."
 docker-compose stop nginx
 
-echo "🔁 Paso 2: Cambiando a configuración HTTPS..."
+echo " Change to setup for HTTPS..."
 sed -i 's/^NGINX_CONF=.*/NGINX_CONF=nginx.https.conf/' .env
 
-echo "🚀 Levantando Nginx con configuración HTTPS..."
+echo "Run Nginx with setup HTTPS..."
 docker-compose up -d nginx
 
-echo "✅ Todo listo. Nginx está sirviendo por HTTPS."
+echo "All ready. Nginx is working with HTTPS."
