@@ -10,7 +10,7 @@ products_bp = Blueprint('products', __name__)
 
 
 # Create a new product (POST)
-@products_bp.route('/products', methods=['POST'])
+@products_bp.route('/products', methods=['POST', 'OPTIONS'])
 @token_required
 def create_products():
     """

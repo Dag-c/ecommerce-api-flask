@@ -9,7 +9,7 @@ users_bp = Blueprint('users', __name__)
 
 
 # Create a new user (POST)
-@users_bp.route('/users', methods=['POST'])
+@users_bp.route('/users', methods=['POST', 'OPTIONS'])
 def create_user():
     """
         Create a new user

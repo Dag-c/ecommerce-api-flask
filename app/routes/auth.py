@@ -5,7 +5,7 @@ from app.services.auth import check_password, generate_jwt_token
 auth_bp = Blueprint("auth", __name__)
 
 
-@auth_bp.route('/login', methods=['POST'])
+@auth_bp.route('/login', methods=['POST', 'OPTIONS'])
 def login():
     """
         Login to get JWT token

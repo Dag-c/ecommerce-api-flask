@@ -2,6 +2,7 @@ from flask import Flask
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import redis
+from flask_cors import CORS
 from sqlalchemy.exc import SQLAlchemyError
 from flasgger import Swagger
 
@@ -11,6 +12,7 @@ from .routes.users import users_bp
 from .routes.products import products_bp
 from .routes.orders import orders_bp
 from .routes.auth import auth_bp
+from .routes.email import email_bp
 from .utils.error_handler import ErrorHandler
 
 
@@ -20,6 +22,12 @@ def create_app(config: Config = None):
         app.config.from_object(config)
     else:
         app.config.from_object(Config)
+
+    CORS(app,
+         origins=["https://dag-c.github.io"],
+         methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+         allow_headers=["Content-Type", "Authorization"],
+         supports_credentials=True)
 
     db.init_app(app)
 
@@ -37,6 +45,7 @@ def create_app(config: Config = None):
     app.register_blueprint(products_bp)
     app.register_blueprint(orders_bp)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(email_bp)
 
     # Swagger
     swagger_template = {
@@ -45,11 +54,11 @@ def create_app(config: Config = None):
             "title": "Ecommerce API",
             "description": "This is the API documentation for my ecommerce project using Flask.",
             "version": "1.0.0",
-            "termsOfService": "https://mywebsite.com/terms",
+            "termsOfService": "https://dag-c.github.io/diegodev-portfolio/#home",
             "contact": {
                 "name": "Diego Armando Guillen de la Cruz",
                 "email": "diego.guillen.d.cruz@gmail.com",
-                "url": "https://yourportfolio.com"
+                "url": "https://dag-c.github.io/diegodev-portfolio/#home"
             },
             "license": {
                 "name": "MIT",
